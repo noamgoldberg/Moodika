@@ -7,9 +7,6 @@ import nltk
 from keybert import KeyBERT
 import gensim
 import spacy
-from sklearn.feature_extraction.text import TfidfVectorizer
-import pandas as pd
-import pickle
 
 
 def get_input():
@@ -36,7 +33,6 @@ def get_tags_and_weights(phrase, method='nltk', lemmatize=False):
     Extracts tags & weights for each tag from input phrase
     :param phrase: input phrase (e.g. "Sunset in the summer")
     :param method: 'nltk', 'KeyBERT'
-    :param tfidf_weights: if True --> assign tfidf weights to each tag
     :param lemmatize: if True --> lemmatize each tag
     :return tags, weights: tags & weights for each tag
     """
@@ -105,13 +101,13 @@ def main1():
     :return embeddings: GENSIM embeddings for each input tag
     """
     phrase = get_input()
-    tags, weights = get_tags_and_weights(phrase, method='nltk', tfidf_weights=False, lemmatize=False)
+    tags, weights = get_tags_and_weights(phrase, method='nltk', lemmatize=False)
     embeddings = get_embeddings(tags)
     print(tags, weights, embeddings)
     return tags, embeddings, weights
 
 
-# main1()
+main1()
 
 if __name__ == '__main__':
     example()

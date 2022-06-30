@@ -17,6 +17,7 @@ from sentence_transformers import SentenceTransformer
 import config as cfg
 import torch
 import numpy as np
+import xgboost
 
 
 def generate_playlist(args):
@@ -36,8 +37,10 @@ def generate_playlist(args):
     with open('MiniLMTransformer.pkl', 'rb') as f:
         transformer_model = pickle.load(f)
 
-    transformers = os.path.join("*_model_xgb_384")
+    transformers = os.path.join("transformer_xgb_models/*_model_xgb_384")
     transformer_files = glob.glob(transformers)
+
+    print(transformer_files)
 
     # EMBEDDING - SENTENCE TRANSFORMER MODEL
     input_text = args.text

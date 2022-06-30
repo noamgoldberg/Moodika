@@ -40,8 +40,6 @@ def generate_playlist(args):
     transformers = os.path.join("transformer_xgb_models/*_model_xgb_384")
     transformer_files = glob.glob(transformers)
 
-    print(transformer_files)
-
     # EMBEDDING - SENTENCE TRANSFORMER MODEL
     input_text = args.text
     genre_text = args.genre

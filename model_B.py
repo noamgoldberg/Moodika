@@ -1,4 +1,3 @@
-import argparse
 import json
 import sys
 import pandas as pd
@@ -10,9 +9,9 @@ import config as cfg
 import torch
 import numpy as np
 import xgboost
-from recommend_playlist import recommend
-from recommend_playlist import create_spotify_playlist
+from recommend_playlist import recommend, create_spotify_playlist
 import logging
+from parse_args import parse_args
 
 logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
@@ -63,31 +62,6 @@ def generate_params(model_input, args):
         input_to_spotify_transformer[parameter] = preds[0]
 
     return input_to_spotify_transformer
-
-
-def parse_args(args_string_list):
-    """
-    Parses input arguments.
-    Returns a structure with all the input arguments
-    """
-    # Interface definition
-    parser = argparse.ArgumentParser(description="Input your mood to generate spotify playlist.",
-                                     formatter_class=argparse.RawTextHelpFormatter)
-
-    subparser = parser.add_subparsers(dest='command')
-
-    login = subparser.add_parser('login', help=f'Update client information. "login -h" for more information')
-    login.add_argument('--id', type=str, required=False)
-    login.add_argument('--secret', type=str, required=False)
-
-    update = subparser.add_parser('input', help=f'Input to pass to model. "input -h" for more information')
-    update.add_argument('-t', '--text', type=str, help='Input text')
-    update.add_argument('-g', '--genre', type=str, required=True,
-                        help=f'Seed genre to generate from - List: {cfg.genres}')
-    update.add_argument('-p', '--popularity', type=int, required=False, help=f'Desired popularity', default=100)
-    update.add_argument('-l', '--length', type=int, required=False, help=f'Desired length of playlist', default=100)
-
-    return parser.parse_args(args_string_list)
 
 
 def main():

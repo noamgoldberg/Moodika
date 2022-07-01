@@ -19,3 +19,5 @@ genres = ["acoustic", "afrobeat", "alt-rock", "alternative", "ambient", "anime",
           "rock-n-roll", "rockabilly", "romance", "sad", "salsa", "samba", "sertanejo", "show-tunes",
           "singer-songwriter", "ska", "sleep", "songwriter", "soul", "soundtracks", "spanish", "study", "summer",
           "swedish", "synth-pop", "tango", "techno", "trance", "trip-hop", "turkish", "work-out", "world-music"]
+
+LOGFILE_NAME = "logfile.log"

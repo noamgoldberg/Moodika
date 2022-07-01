@@ -1,17 +1,9 @@
 import argparse
 import json
 import sys
-from urllib.parse import urlencode
-import requests
 import pandas as pd
 import glob
 import os
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-from spotipy.oauth2 import SpotifyClientCredentials
-from pprint import pprint
-from time import sleep
-from tqdm import tqdm
 import pickle
 from sentence_transformers import SentenceTransformer
 import config as cfg
@@ -20,45 +12,64 @@ import numpy as np
 import xgboost
 from recommend_playlist import recommend
 from recommend_playlist import create_spotify_playlist
+import logging
+
+logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
+                    level=logging.INFO)
 
 
-def generate_playlist(args):
+def embed_text(args):
+    """
+    Uses HuggingFace sentence-transformers/all-MiniLM-L6-v2 model to map sentences & paragraphs 
+    to a 384 dimensional dense vector space for use as input to playlist generation model. 
+    Returns vector space.
+    """
+    # Open saved pickle file 
     with open('MiniLMTransformer.pkl', 'rb') as f:
-        transformer_model = pickle.load(f)
+        embedder = pickle.load(f)
 
-    transformers = os.path.join("transformer_xgb_models/*_model_xgb_384")
-    transformer_files = glob.glob(transformers)
-
-    # EMBEDDING - SENTENCE TRANSFORMER MODEL
+    # Embed input text
     input_text = args.text
+    input_to_model = embedder.encode(input_text)
+    return input_to_model
+
+
+def generate_params(model_input, args):
+    """
+    Takes vector space of dimension 384 and outputs a prediction for each of 12 audio parameters
+    using 12 separate pre-trained XGBoostRegressor models.
+    Returns a dictionary of predicted parameters, including desired genre and playlist length.
+    """
+    # Parameters and genre
     genre_text = args.genre
-    #genres = genre_text.split()
-    input_to_model = transformer_model.encode(input_text)
     parameters = ['acousticness', 'danceability', 'energy', 'instrumentalness', 'key',
                   'liveness', 'loudness', 'mode', 'speechiness', 'tempo',
                   'time_signature', 'valence']
+
+    # Create dictionary to be added to
     input_to_spotify_transformer = {'seed_genres': genre_text,
                                     'limit': args.length,
                                     'popularity': args.popularity}
 
-    for parameter, model in zip(parameters, transformer_files):
+    # Find the XGB files
+    xgboost_files = os.path.join("transformer_xgb_models/*_model_xgb_384")
+    xgboost_models = glob.glob(xgboost_files)
+
+    # Use each XGB model to predict on corresponding audio parameter
+    for parameter, model in zip(parameters, xgboost_models):
         with open(model, 'rb') as f:
             xgb_model = pickle.load(f)
-        preds = xgb_model.predict(input_to_model.reshape(1, -1))
+        preds = xgb_model.predict(model_input.reshape(1, -1))
         input_to_spotify_transformer[parameter] = preds[0]
 
-    tracks = recommend(input_to_spotify_transformer)
-    create_spotify_playlist(tracks, args.text)
+    return input_to_spotify_transformer
 
 
 def parse_args(args_string_list):
     """
-    parse_args() is parsing the py file input arguments into the struct args
-    :param args_string_list: a list of the input arguments of the py file
-    :return a Struct with all the input arguments of the py file
+    Parses input arguments.
+    Returns a structure with all the input arguments
     """
-    # logging.debug(f"parse_args() started")
-
     # Interface definition
     parser = argparse.ArgumentParser(description="Input your mood to generate spotify playlist.",
                                      formatter_class=argparse.RawTextHelpFormatter)
@@ -81,8 +92,7 @@ def parse_args(args_string_list):
 
 def main():
     """
-    main() getting the input arguments of the py file and calling scrape() with them
-    main() also catches exceptions
+    Main function, parses the arguments and uses them to create a recommended Spotify playlist on user's account.
     """
     # Get user arguments
     args = parse_args(sys.argv[1:])
@@ -108,16 +118,19 @@ def main():
     # Run scrape() by user's criteria
     if args.command == 'input':
         try:
-            generate_playlist(args)
+            embedded_text = embed_text(args)
+            params = generate_params(embedded_text, args)
+            tracks = recommend(params)
+            create_spotify_playlist(tracks, args.text)
         except ValueError as e:
             print(e)
-            #logging.critical(e)
+            logging.critical(e)
         except AttributeError as e:
             print(e)
-            #logging.critical(e)
+            logging.critical(e)
         except TypeError as e:
             print(e)
-            #logging.critical(e)
+            logging.critical(e)
 
 
 if __name__ == '__main__':

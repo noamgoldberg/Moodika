@@ -1,0 +1,19 @@
+2022-07-01 14:21:17,743 INFO: Spotify playlist i love you - Moodika-generated was created for Spotify user dbr2211.
+2022-07-01 15:18:39,304 INFO: Spotify playlist 'arguing with my math teacher - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 11:10:47,473 INFO: Spotify playlist 'driving to the beach - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 19:35:00,856 ERROR: HTTP Error for POST to https://api.spotify.com/v1/playlists/40sohmRkqIKdFT4zpdrl40/tracks with Params: {'position': None} returned 400 due to Error parsing JSON.
+2022-07-03 19:39:54,290 ERROR: HTTP Error for POST to https://api.spotify.com/v1/playlists/74vQK7XON39EKonuO7HZNK/tracks with Params: {'position': None} returned 400 due to Error parsing JSON.
+2022-07-03 19:58:17,870 WARNING: Nothing was returned from Spotify for url https://api.spotify.com/v1/recommendations?seed_genres=%5B%27pop%27%2C+%27rock%27%2C+%27folk%27%2C+%27hip-hop%27%2C+%27electronic%27%5D&limit=10&popularity=100&target_acousticness=0.23091902&target_danceability=0.58494157&target_energy=0.65617794&target_instrumentalness=0.12710588&target_key=5.1559806&target_liveness=0.19200881&target_loudness=-7.398147&target_mode=0.66861665&target_speechiness=0.108706385&target_tempo=121.392166&target_time_signature=3.9359083&target_valence=0.49671844.
+2022-07-03 20:10:13,660 CRITICAL: spotipy.client.Spotify.recommendations() got multiple values for keyword argument 'seed_genres'
+2022-07-03 20:13:36,765 CRITICAL: spotipy.client.Spotify.recommendations() got multiple values for keyword argument 'limit'
+2022-07-03 20:15:32,392 ERROR: HTTP Error for GET to https://api.spotify.com/v1/recommendations with Params: {'limit': 10, 'seed_genres': 'pop,rock,folk,hip-hop,electronic', 'target_acousticness': 0.23091902, 'target_danceability': 0.58494157, 'target_energy': 0.65617794, 'target_instrumentalness': 0.12710588, 'target_key': 5.1559806, 'target_liveness': 0.19200881, 'target_loudness': -7.398147, 'target_speechiness': 0.108706385, 'target_tempo': 121.392166, 'target_time_signature': 3.9359083, 'target_valence': 0.49671844} returned 400 due to invalid request
+2022-07-03 20:18:35,752 INFO: Spotify playlist 'arguing with my math teacher - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 20:20:26,421 INFO: Spotify playlist 'fly me to the moon - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 20:21:04,750 INFO: Spotify playlist 'screaming my head off at a party - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 21:15:33,466 INFO: Spotify playlist 'screaming my head off at a party - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 21:17:58,409 CRITICAL: name 'AUDIO_FEATURES_TO_EXTRACT' is not defined
+2022-07-03 21:28:20,698 CRITICAL: 'Namespace' object has no attribute 'genre'
+2022-07-03 21:31:57,070 CRITICAL: recommend() missing 3 required positional arguments: 'genre_list', 'sp', and 'args'
+2022-07-03 21:39:18,366 CRITICAL: name 'pickle' is not defined
+2022-07-03 21:40:26,229 CRITICAL: name 'pickle' is not defined
+2022-07-03 21:52:20,561 INFO: Spotify playlist 'screaming my head off at a party - Moodika-generated' was created for Spotify user 'dbr2211'.

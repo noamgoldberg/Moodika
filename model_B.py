@@ -9,7 +9,7 @@ import config as cfg
 import torch
 import numpy as np
 import xgboost
-from recommend_playlist import recommend, create_spotify_playlist, authorize
+from recommend_playlist import *
 import logging
 from parse_args import parse_args
 
@@ -31,33 +31,6 @@ def embed_text(args):
     input_text = args.text
     input_to_model = embedder.encode(input_text)
     return input_to_model
-
-
-def predict_genre(args):
-    with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
-        similarity_model = pickle.load(ce_file)
-
-    # We want to compute the similarity between the query sentence
-    input_text = args.text
-
-    # With all genres
-    genres = cfg.genres
-    sentence_combinations = [[input_text, genre] for genre in genres]
-    similarity_scores = similarity_model.predict(sentence_combinations)
-    sim_scores_sorted = reversed(np.argsort(similarity_scores))
-
-    top_genres = []
-    for idx in sim_scores_sorted:
-        if similarity_scores[idx] > cfg.THRESHOLD:
-            top_genres.append(genres[idx])
-
-        print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
-
-    if len(top_genres) == 0:
-        top_genres = cfg.default_genres
-    print(top_genres)
-    genre_text = top_genres[:5]
-    return genre_text
 
 
 def generate_params(model_input, args):

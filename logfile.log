@@ -17,3 +17,10 @@
 2022-07-03 21:39:18,366 CRITICAL: name 'pickle' is not defined
 2022-07-03 21:40:26,229 CRITICAL: name 'pickle' is not defined
 2022-07-03 21:52:20,561 INFO: Spotify playlist 'screaming my head off at a party - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 22:11:01,963 CRITICAL: name 'AUDIO_FEATURES_TO_EXTRACT' is not defined
+2022-07-03 22:11:55,455 CRITICAL: name 'AUDIO_FEATURES_TO_EXTRACT' is not defined
+2022-07-03 22:13:08,709 CRITICAL: 'Namespace' object has no attribute 'genre'
+2022-07-03 22:16:43,039 INFO: Spotify playlist 'heck ya test - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 22:19:20,533 CRITICAL: create_spotify_playlist() takes 3 positional arguments but 4 were given
+2022-07-03 22:20:17,212 INFO: Spotify playlist 'heck ya test - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 22:20:47,729 INFO: Spotify playlist 'another day another dollar - Moodika-generated' was created for Spotify user 'dbr2211'.

@@ -8,11 +8,11 @@ from config import *
 from parse_args import *
 import logging
 
-
-def authorize():
-    sp = spotipy.Spotify(
-        auth_manager=spotipy.oauth2.SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
-    return sp
+#
+# def authorize():
+#     sp = spotipy.Spotify(
+#         auth_manager=spotipy.oauth2.SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
+#     return sp
 
 
 def get_token():
@@ -67,8 +67,6 @@ def generate_params(args, num_playlists=10, print_steps=False):
                       audio_features]
     avg_audio_features = dict(pd.concat([pd.DataFrame(audio_features[i]).mean() for i in range(len(playlist_uris))],
                                         axis=1).mean(axis=1))
-    avg_audio_features['seed_genres'] = args.genre
-    avg_audio_features['limit'] = args.length
     avg_audio_features['popularity'] = args.popularity
     if print_steps:
         print("Features averaged (series):\n", avg_audio_features)
@@ -81,13 +79,15 @@ def main(print_steps=False):
         print("Parsed args:", args)
     if args.command == 'input':
         try:
+            sp = authorize()
+            genre_text = predict_genre(args)
             params = generate_params(args, num_playlists=10, print_steps=print_steps)
             if print_steps:
                 print("Spotify params:", params)
-            tracks = recommend(params)
+            tracks = recommend(params, genre_text, sp, args)
             if print_steps:
                 print("tracks:", tracks)
-            create_spotify_playlist(tracks, args.text)
+            create_spotify_playlist(tracks, args.text, sp)
         except ValueError as e:
             print('ValueError:', e)
             logging.critical(e)
@@ -116,4 +116,4 @@ def main(print_steps=False):
 
 
 if __name__ == '__main__':
-    main(print_steps=False)
+    main(print_steps=True)

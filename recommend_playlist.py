@@ -5,6 +5,8 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.oauth2 import SpotifyClientCredentials
 import logging
+import pickle
+import numpy as np
 
 logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s: %(message)s",
                     level=logging.INFO)
@@ -18,6 +20,33 @@ def authorize():
                                                    redirect_uri=cfg.REDIRECT_URI,
                                                    scope=scope))
     return sp
+
+
+def predict_genre(args):
+    with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
+        similarity_model = pickle.load(ce_file)
+
+    # We want to compute the similarity between the query sentence
+    input_text = args.text
+
+    # With all genres
+    genres = cfg.genres
+    sentence_combinations = [[input_text, genre] for genre in genres]
+    similarity_scores = similarity_model.predict(sentence_combinations)
+    sim_scores_sorted = reversed(np.argsort(similarity_scores))
+
+    top_genres = []
+    for idx in sim_scores_sorted:
+        if similarity_scores[idx] > cfg.THRESHOLD:
+            top_genres.append(genres[idx])
+
+        print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
+
+    if len(top_genres) == 0:
+        top_genres = cfg.default_genres
+    print(top_genres)
+    genre_text = top_genres[:5]
+    return genre_text
 
 
 def recommend(param_dict, genre_list, sp, args):

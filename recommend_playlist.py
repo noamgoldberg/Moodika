@@ -13,6 +13,9 @@ logging.basicConfig(filename=cfg.LOGFILE_NAME, format="%(asctime)s %(levelname)s
 
 
 def authorize():
+    """
+    Create and return a Spotipy instance
+    """
     # Define the permissions scope of current user
     scope = "user-read-playback-state,user-modify-playback-state,playlist-modify-public"
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cfg.CLIENT_ID,
@@ -23,29 +26,45 @@ def authorize():
 
 
 def predict_genre(args):
+    """
+    Takes given free text and returns the most similar genres over a given similarity threshold (limit 5).
+    Threshold can be configured in config file.
+    If no genres are found over similarity threshold, a default list of genres is returned (can be configured as well).
+    """
     with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
         similarity_model = pickle.load(ce_file)
 
     # We want to compute the similarity between the query sentence
     input_text = args.text
 
-    # With all genres
+    # Take all combinations of the text and genre
     genres = cfg.genres
     sentence_combinations = [[input_text, genre] for genre in genres]
+
+    # find the similarity scores between the text and each genre, and sort from highest to lowest
     similarity_scores = similarity_model.predict(sentence_combinations)
     sim_scores_sorted = reversed(np.argsort(similarity_scores))
 
+    # Return the top genres over a given threshold
     top_genres = []
     for idx in sim_scores_sorted:
         if similarity_scores[idx] > cfg.THRESHOLD:
             top_genres.append(genres[idx])
-
+    if args.verbose > 2:
+        print(f"All genres available, sorted by similarity score to {input_text}")
         print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
 
     if len(top_genres) == 0:
         top_genres = cfg.default_genres
-    print(top_genres)
+        if args.verbose > 1:
+            print(f"No genres found over similarity threshold {cfg.THRESHOLD}, returning default genres.")
+    else:
+        if args.verbose > 1:
+            print(f"All genres over similarity threshold {cfg.THRESHOLD}")
+            print(top_genres)
     genre_text = top_genres[:5]
+    if args.verbose > 0:
+        print(f"Genres to be passed to Spotify: {genre_text}")
     return genre_text
 
 
@@ -53,34 +72,17 @@ def recommend(param_dict, genre_list, sp, args):
     """
     Takes a dictionary of values for various audio parameters and returns a list of Spotify-recommended track URIs.
     """
-    # Connecting to Spotify using client application
-    # AUTH_RESPONSE = requests.post(cfg.AUTH_URL, {
-    #     'grant_type': 'client_credentials',
-    #     'client_id': cfg.CLIENT_ID,
-    #     'client_secret': cfg.CLIENT_SECRET})
-    #
-    # # convert the response to JSON
-    # AUTH_RESPONSE_DATA = AUTH_RESPONSE.json()
-    #
-    # # save the access token
-    # ACCESS_TOKEN = AUTH_RESPONSE_DATA['access_token']
-    #
-    # # Use the access token to generate authorization
-    # HEADERS = {'Authorization': 'Bearer {token}'.format(token=ACCESS_TOKEN)}
-    # Define the permissions scope of current user
-
-    #endpoint = f"{cfg.BASE_URL}/recommendations"
-    #search_params = urlencode(param_dict)
-    #lookup_url = f"{endpoint}?{search_params}"
+    # Send a request to Spotify API using Spotipy
     result = sp.recommendations(seed_genres=genre_list, limit=args.length, **param_dict)
 
-    # Send a request to Spotify API using Spotipy
     # Iterate over response from Spotify, taking track URIs from recommended tracks
-    print('Playlist')
     if result:
         track_uris = []
+        if args.verbose > 0:
+            print('Playlist')
         for track in result['tracks']:
-            print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
+            if args.verbose > 0:
+                print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
             track_uris.append(track['uri'])
     else:
         logging.warning(f"Nothing was returned from Spotify for url {param_dict}.")
@@ -88,7 +90,7 @@ def recommend(param_dict, genre_list, sp, args):
     return track_uris
 
 
-def create_spotify_playlist(track_uris, input_text, sp):
+def create_spotify_playlist(track_uris, input_text, sp, args):
     """
     Utilize Spotipy library to create a playlist given list of track URIs for current user
     """
@@ -102,10 +104,16 @@ def create_spotify_playlist(track_uris, input_text, sp):
     playlists = sp.user_playlists(user_id)
     playlist_uid = playlists['items'][0]['id']
     playlist_link = f"https://open.spotify.com/playlist/{playlist_uid}"
+    if args.verbose > 1:
+        print(f"Track URIs: {track_uris}")
 
     # Add tracks
     sp.playlist_add_items(playlist_uid, track_uris)
     logging.info(f"Spotify playlist '{playlist_to_add}' was created for Spotify user '{user_id}'.")
 
-    print(playlist_link)
+    if args.verbose > 1:
+        print(f"User ID: {user_id}")
+        print(f"Playlist name: {playlist_to_add}")
+    if args.verbose > 0:
+        print(playlist_link)
     return playlist_link

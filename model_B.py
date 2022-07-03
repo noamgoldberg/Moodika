@@ -59,7 +59,8 @@ def generate_params(model_input, args):
         preds = xgb_model.predict(model_input.reshape(1, -1))
         input_to_spotify_transformer[parameter] = preds[0]
 
-    print(input_to_spotify_transformer)
+    if args.verbose > 0:
+        print(input_to_spotify_transformer)
     return input_to_spotify_transformer
 
 
@@ -70,25 +71,7 @@ def main():
     # Get user arguments
     args = parse_args(sys.argv[1:])
 
-    # # Read login information from login.json
-    # with open("login.json", "r") as openfile:
-    #     login_info = json.load(openfile)
-    #
-    # # Update user login information for connection
-    # if args.command == 'login':
-    #     if args.id:
-    #         with open("login.json", "w") as outfile:
-    #             login_info['hostname'] = args.id
-    #             json.dump(login_info, outfile)
-    #
-    #     if args.secret:
-    #         with open("login.json", "w") as outfile:
-    #             login_info['username'] = args.username
-    #             json.dump(login_info, outfile)
-    #
-    #     return
-
-    # Run scrape() by user's criteria
+    # Generate playlist using embedded user input and predicted genre by user's criteria
     if args.command == 'input':
         try:
             sp = authorize()
@@ -96,7 +79,7 @@ def main():
             embedded_text = embed_text(args)
             params = generate_params(embedded_text, args)
             tracks = recommend(params, genres, sp, args)
-            create_spotify_playlist(tracks, args.text, sp)
+            create_spotify_playlist(tracks, args.text, sp, args)
         except ValueError as e:
             print(e)
             logging.critical(e)

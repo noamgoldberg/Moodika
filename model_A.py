@@ -87,7 +87,7 @@ def main(print_steps=False):
             tracks = recommend(params, genre_text, sp, args)
             if print_steps:
                 print("tracks:", tracks)
-            create_spotify_playlist(tracks, args.text, sp)
+            create_spotify_playlist(tracks, args.text, sp, args)
         except ValueError as e:
             print('ValueError:', e)
             logging.critical(e)
@@ -116,4 +116,4 @@ def main(print_steps=False):
 
 
 if __name__ == '__main__':
-    main(print_steps=True)
+    main(print_steps=False)

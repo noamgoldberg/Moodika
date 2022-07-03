@@ -9,7 +9,7 @@ import config as cfg
 import torch
 import numpy as np
 import xgboost
-from recommend_playlist import recommend, create_spotify_playlist
+from recommend_playlist import recommend, create_spotify_playlist, authorize
 import logging
 from parse_args import parse_args
 
@@ -33,6 +33,33 @@ def embed_text(args):
     return input_to_model
 
 
+def predict_genre(args):
+    with open('CrossEncoder_GenrePicker.pkl', 'rb') as ce_file:
+        similarity_model = pickle.load(ce_file)
+
+    # We want to compute the similarity between the query sentence
+    input_text = args.text
+
+    # With all genres
+    genres = cfg.genres
+    sentence_combinations = [[input_text, genre] for genre in genres]
+    similarity_scores = similarity_model.predict(sentence_combinations)
+    sim_scores_sorted = reversed(np.argsort(similarity_scores))
+
+    top_genres = []
+    for idx in sim_scores_sorted:
+        if similarity_scores[idx] > cfg.THRESHOLD:
+            top_genres.append(genres[idx])
+
+        print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
+
+    if len(top_genres) == 0:
+        top_genres = cfg.default_genres
+    print(top_genres)
+    genre_text = top_genres[:5]
+    return genre_text
+
+
 def generate_params(model_input, args):
     """
     Takes vector space of dimension 384 and outputs a prediction for each of 12 audio parameters
@@ -40,15 +67,13 @@ def generate_params(model_input, args):
     Returns a dictionary of predicted parameters, including desired genre and playlist length.
     """
     # Parameters and genre
-    genre_text = args.genre
-    parameters = ['acousticness', 'danceability', 'energy', 'instrumentalness', 'key',
-                  'liveness', 'loudness', 'mode', 'speechiness', 'tempo',
-                  'time_signature', 'valence']
+
+    parameters = ['target_acousticness', 'target_danceability', 'target_energy', 'target_instrumentalness',
+                  'key', 'target_liveness', 'target_loudness', 'mode', 'target_speechiness',
+                  'target_tempo', 'time_signature', 'target_valence']
 
     # Create dictionary to be added to
-    input_to_spotify_transformer = {'seed_genres': genre_text,
-                                    'limit': args.length,
-                                    'popularity': args.popularity}
+    input_to_spotify_transformer = {'popularity': args.popularity}
 
     # Find the XGB files
     xgboost_files = os.path.join("transformer_xgb_models/*_model_xgb_384")
@@ -61,6 +86,7 @@ def generate_params(model_input, args):
         preds = xgb_model.predict(model_input.reshape(1, -1))
         input_to_spotify_transformer[parameter] = preds[0]
 
+    print(input_to_spotify_transformer)
     return input_to_spotify_transformer
 
 
@@ -92,10 +118,12 @@ def main():
     # Run scrape() by user's criteria
     if args.command == 'input':
         try:
+            sp = authorize()
+            genres = predict_genre(args)
             embedded_text = embed_text(args)
             params = generate_params(embedded_text, args)
-            tracks = recommend(params)
-            create_spotify_playlist(tracks, args.text)
+            tracks = recommend(params, genres, sp, args)
+            create_spotify_playlist(tracks, args.text, sp)
         except ValueError as e:
             print(e)
             logging.critical(e)

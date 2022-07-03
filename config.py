@@ -5,22 +5,33 @@ REDIRECT_URI = "http://localhost:8080"
 AUTH_URL = 'https://accounts.spotify.com/api/token'
 BASE_URL = 'https://api.spotify.com/v1'
 
-AUDIO_FEATURES_TO_EXTRACT = ['danceability', 'energy', 'key', 'mode', 'loudness', 'speechiness', 'acousticness',
-                             'instrumentalness', 'liveness', 'valence', 'tempo', 'time_signature']
+# genres = ["acoustic", "afrobeat", "alt-rock", "alternative", "ambient", "anime", "black-metal", "bluegrass",
+#           "blues", "bossanova", "brazil", "breakbeat", "british", "cantopop", "chicago-house", "children", "chill",
+#           "classical", "club", "comedy", "country", "dance", "dancehall", "death-metal", "deep-house",
+#           "detroit-techno", "disco", "disney", "drum-and-bass", "dub", "dubstep", "edm", "electro", "electronic",
+#           "emo", "folk", "forro", "french", "funk", "garage", "german", "gospel", "goth", "grindcore", "groove",
+#           "grunge", "guitar", "happy", "hard-rock", "hardcore", "hardstyle", "heavy-metal", "hip-hop", "holidays",
+#           "honky-tonk", "house", "idm", "indian", "indie", "indie-pop", "industrial", "iranian", "j-dance", "j-idol",
+#           "j-pop", "j-rock", "jazz", "k-pop", "kids", "latin", "latino", "malay", "mandopop", "metal", "metal-misc",
+#           "metalcore", "minimal-techno", "movies", "mpb", "new-age", "new-release", "opera", "pagode", "party",
+#           "philippines-opm", "piano", "pop", "pop-film", "post-dubstep", "power-pop", "progressive-house",
+#           "psych-rock", "punk", "punk-rock", "r-n-b", "rainy-day", "reggae", "reggaeton", "road-trip", "rock",
+#           "rock-n-roll", "rockabilly", "romance", "sad", "salsa", "samba", "sertanejo", "show-tunes",
+#           "singer-songwriter", "ska", "sleep", "songwriter", "soul", "soundtracks", "spanish", "study", "summer",
+#           "swedish", "synth-pop", "tango", "techno", "trance", "trip-hop", "turkish", "work-out", "world-music"]
 
-genres = ["acoustic", "afrobeat", "alt-rock", "alternative", "ambient", "anime", "black-metal", "bluegrass",
-          "blues", "bossanova", "brazil", "breakbeat", "british", "cantopop", "chicago-house", "children", "chill",
-          "classical", "club", "comedy", "country", "dance", "dancehall", "death-metal", "deep-house",
-          "detroit-techno", "disco", "disney", "drum-and-bass", "dub", "dubstep", "edm", "electro", "electronic",
-          "emo", "folk", "forro", "french", "funk", "garage", "german", "gospel", "goth", "grindcore", "groove",
-          "grunge", "guitar", "happy", "hard-rock", "hardcore", "hardstyle", "heavy-metal", "hip-hop", "holidays",
-          "honky-tonk", "house", "idm", "indian", "indie", "indie-pop", "industrial", "iranian", "j-dance", "j-idol",
-          "j-pop", "j-rock", "jazz", "k-pop", "kids", "latin", "latino", "malay", "mandopop", "metal", "metal-misc",
-          "metalcore", "minimal-techno", "movies", "mpb", "new-age", "new-release", "opera", "pagode", "party",
-          "philippines-opm", "piano", "pop", "pop-film", "post-dubstep", "power-pop", "progressive-house",
-          "psych-rock", "punk", "punk-rock", "r-n-b", "rainy-day", "reggae", "reggaeton", "road-trip", "rock",
-          "rock-n-roll", "rockabilly", "romance", "sad", "salsa", "samba", "sertanejo", "show-tunes",
-          "singer-songwriter", "ska", "sleep", "songwriter", "soul", "soundtracks", "spanish", "study", "summer",
-          "swedish", "synth-pop", "tango", "techno", "trance", "trip-hop", "turkish", "work-out", "world-music"]
+genres = ["acoustic", "alt-rock", "alternative", "ambient", "anime",
+          "bluegrass", "blues", "children", "chill", "classical", "club",
+          "comedy", "country", "dance", "disco", "disney", "dubstep", "edm",
+          "electronic", "emo", "folk", "funk", "garage", "gospel", "goth",
+          "grunge", "guitar", "happy", "hard-rock", "hardcore", "heavy-metal",
+          "hip-hop", "holidays", "house", "idm", "indie", "indie-pop", "jazz", "k-pop", "kids", "latin", "metal",
+          "movies", "opera", "party", "piano", "pop", "power-pop", "punk", "punk-rock", "r-n-b", "rainy-day", "reggae",
+          "reggaeton", "road-trip", "rock", "rock-n-roll", "romance", "sad", "salsa", "show-tunes",
+          "singer-songwriter", "ska", "sleep", "songwriter", "soul", "soundtracks", "study", "summer",
+          "synth-pop", "tango", "techno", "work-out", "world-music"]
 
+default_genres = ['pop', 'rock', 'folk', 'hip-hop', 'electronic']
 LOGFILE_NAME = "logfile.log"
+
+THRESHOLD = 0.3

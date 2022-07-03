@@ -63,7 +63,6 @@ def generate_params(args, num_playlists=10, print_steps=False):
 
     # (3) Get audio features of each track in each playlist
     audio_features = [sp.audio_features(tracks=track_uris_dict[playlist]) for playlist in track_uris_dict]
-    print("audio_features (list of dicts):\n", audio_features)
     audio_features = [[{f: track[f] for f in AUDIO_FEATURES_TO_EXTRACT} for track in playlist] for playlist in
                       audio_features]
     avg_audio_features = dict(pd.concat([pd.DataFrame(audio_features[i]).mean() for i in range(len(playlist_uris))],
@@ -82,7 +81,7 @@ def main(print_steps=False):
         print("Parsed args:", args)
     if args.command == 'input':
         try:
-            params = generate_params(args, num_playlists=10, print_steps=True)
+            params = generate_params(args, num_playlists=10, print_steps=print_steps)
             if print_steps:
                 print("Spotify params:", params)
             tracks = recommend(params)

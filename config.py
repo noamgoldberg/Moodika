@@ -5,6 +5,9 @@ REDIRECT_URI = "http://localhost:8080"
 AUTH_URL = 'https://accounts.spotify.com/api/token'
 BASE_URL = 'https://api.spotify.com/v1'
 
+AUDIO_FEATURES_TO_EXTRACT = ['danceability', 'energy', 'key', 'mode', 'loudness', 'speechiness', 'acousticness',
+                             'instrumentalness', 'liveness', 'valence', 'tempo', 'time_signature']
+
 genres = ["acoustic", "afrobeat", "alt-rock", "alternative", "ambient", "anime", "black-metal", "bluegrass",
           "blues", "bossanova", "brazil", "breakbeat", "british", "cantopop", "chicago-house", "children", "chill",
           "classical", "club", "comedy", "country", "dance", "dancehall", "death-metal", "deep-house",

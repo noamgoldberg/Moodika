@@ -49,9 +49,9 @@ def predict_genre(args):
     for idx in sim_scores_sorted:
         if similarity_scores[idx] > cfg.THRESHOLD:
             top_genres.append(genres[idx])
-    if args.verbose > 2:
-        print(f"All genres available, sorted by similarity score to {input_text}")
-        print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
+        if args.verbose > 2:
+            print(f"Genre and similarity score to {input_text}")
+            print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
 
     # if no genres are over the similarity threshold, return a list of default genres
     if len(top_genres) == 0:

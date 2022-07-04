@@ -57,7 +57,7 @@ def main():
             genre_text = predict_genre(args)
             if args.verbose > 0:
                 print("Genres:", genre_text)
-            params = generate_params(args, num_playlists=10)
+            params = generate_params(args, num_playlists=2)
             if args.verbose > 1:
                 print("Spotify params:", params)
             tracks = recommend(params, genre_text, sp, args)

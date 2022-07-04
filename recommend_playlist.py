@@ -55,7 +55,6 @@ def predict_genre(args):
             top_scores.append(similarity_scores[idx])
 
     for i in range(len(top_scores) - 1):
-        print(abs(top_scores[i + 1]) - abs(top_scores[i]))
         if abs(top_scores[i + 1]) - abs(top_scores[i]) > 2:
             top_genres = top_genres[:i + 1]
             break

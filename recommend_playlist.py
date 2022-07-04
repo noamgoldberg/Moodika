@@ -46,28 +46,24 @@ def predict_genre(args):
 
     # Return the top genres over a given threshold
     top_genres = []
+    top_scores = []
     for idx in sim_scores_sorted:
-        if similarity_scores[idx] > cfg.THRESHOLD:
-            top_genres.append(genres[idx])
         if args.verbose > 2:
-            print(f"Genre and similarity score to {input_text}")
             print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
+        if len(top_genres) < 5:
+            top_genres.append(genres[idx])
+            top_scores.append(similarity_scores[idx])
 
-    # if no genres are over the similarity threshold, return a list of default genres
-    if len(top_genres) == 0:
-        top_genres = cfg.default_genres
-        if args.verbose > 1:
-            print(f"No genres found over similarity threshold {cfg.THRESHOLD}, returning default genres.")
-    else:
-        if args.verbose > 1:
-            print(f"All genres over similarity threshold {cfg.THRESHOLD}")
-            print(top_genres)
+    for i in range(len(top_scores) - 1):
+        print(abs(top_scores[i + 1]) - abs(top_scores[i]))
+        if abs(top_scores[i + 1]) - abs(top_scores[i]) > 2:
+            top_genres = top_genres[:i + 1]
+            break
 
     # take only the top 5 genres
-    genre_text = top_genres[:5]
     if args.verbose > 0:
-        print(f"Genres to be passed to Spotify: {genre_text}")
-    return genre_text
+        print(f"Genres to be passed to Spotify: {top_genres}")
+    return top_genres
 
 
 def recommend(param_dict, genre_list, sp, args):

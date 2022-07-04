@@ -15,14 +15,14 @@ def raise_spotify_error():
     raise Exception(f'Error. Trouble connecting to Spotify. Try a different input phrase.')
 
 
-def generate_params(args, num_playlists=10, print_steps=False):
+def generate_params(args, num_playlists=10):
     input_text = args.text
     sp = authorize()
 
     # (1) Get all playlist uris from playlists in search results
     playlists_results = sp.search(q=input_text, limit=num_playlists, type='playlist')['playlists']
     playlist_uris = [playlist['id'] for playlist in playlists_results['items']]
-    if print_steps:
+    if args.verbose > 2:
         print("Playlist URIs (list of strings):", playlist_uris)
 
     # (2) Get all track uris from playlists in search results
@@ -31,7 +31,7 @@ def generate_params(args, num_playlists=10, print_steps=False):
         raise_spotify_error()
     track_uris_dict = {playlist_uris[i]: [track['track']['id'] if track['track'] is not None else None for track in track_results[i]['items']] for i in range(len(playlist_uris))}
     track_uris_dict = {key: [track_uri for track_uri in track_uris_dict[key] if track_uri] for key in track_uris_dict}
-    if print_steps:
+    if args.verbose > 2:
         print("Track URIs (dict):\n", track_uris_dict)
 
     # (3) Get audio features of each track in each playlist
@@ -41,30 +41,30 @@ def generate_params(args, num_playlists=10, print_steps=False):
     avg_audio_features = dict(pd.concat([pd.DataFrame(audio_features[i]).mean() for i in range(len(playlist_uris))],
                                         axis=1).mean(axis=1))
     avg_audio_features['popularity'] = args.popularity
-    if print_steps:
+    if args.verbose > 1:
         print("Features averaged (series):\n", avg_audio_features)
     return avg_audio_features
 
 
-def main(print_steps=False):
+def main():
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     args = parse_args(sys.argv[1:])
-    if print_steps:
+    if args.verbose > 0:
         print("Parsed args:", args)
     if args.command == 'input':
         try:
             sp = authorize()
             genre_text = predict_genre(args)
-            if print_steps:
+            if args.verbose > 0:
                 print("Genres:", genre_text)
             params = generate_params(args, num_playlists=10, print_steps=print_steps)
-            if print_steps:
+            if args.verbose > 1:
                 print("Spotify params:", params)
             tracks = recommend(params, genre_text, sp, args)
-            if print_steps:
+            if args.verbose > 2:
                 print("Playlist (Song URIs):", tracks)
             playlist_url = create_spotify_playlist(tracks, args.text, sp, args)
-            if print_steps:
+            if args.verbose > 0:
                 print("Playlist URL:", playlist_url)
         except ValueError as e:
             print('ValueError:', e)
@@ -81,4 +81,4 @@ def main(print_steps=False):
 
 
 if __name__ == '__main__':
-    main(print_steps=False)
+    main()

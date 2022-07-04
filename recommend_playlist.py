@@ -1,5 +1,4 @@
 import config as cfg
-from urllib.parse import urlencode
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -54,6 +53,7 @@ def predict_genre(args):
         print(f"All genres available, sorted by similarity score to {input_text}")
         print("{:.2f}\t{}".format(similarity_scores[idx], genres[idx]))
 
+    # if no genres are over the similarity threshold, return a list of default genres
     if len(top_genres) == 0:
         top_genres = cfg.default_genres
         if args.verbose > 1:
@@ -62,6 +62,8 @@ def predict_genre(args):
         if args.verbose > 1:
             print(f"All genres over similarity threshold {cfg.THRESHOLD}")
             print(top_genres)
+
+    # take only the top 5 genres
     genre_text = top_genres[:5]
     if args.verbose > 0:
         print(f"Genres to be passed to Spotify: {genre_text}")

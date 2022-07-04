@@ -45,8 +45,11 @@ def generate_params(model_input, args):
                   'key', 'target_liveness', 'target_loudness', 'mode', 'target_speechiness',
                   'target_tempo', 'time_signature', 'target_valence']
 
-    # Create dictionary to be added to
-    input_to_spotify_transformer = {'popularity': args.popularity}
+    # Create dictionary to be added to (with popularity if argument has been passed)
+    if args.popularity:
+        input_to_spotify_transformer = {'popularity': args.popularity}
+    else:
+        input_to_spotify_transformer = {}
 
     # Find the XGB files
     xgboost_files = os.path.join("transformer_xgb_models/*_model_xgb_384")

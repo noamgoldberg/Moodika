@@ -24,3 +24,16 @@
 2022-07-03 22:19:20,533 CRITICAL: create_spotify_playlist() takes 3 positional arguments but 4 were given
 2022-07-03 22:20:17,212 INFO: Spotify playlist 'heck ya test - Moodika-generated' was created for Spotify user 'dbr2211'.
 2022-07-03 22:20:47,729 INFO: Spotify playlist 'another day another dollar - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 23:18:35,494 INFO: Spotify playlist 'taking the subway - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-03 23:19:08,091 INFO: Spotify playlist 'taking the subway - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 09:33:30,314 INFO: Spotify playlist 'first date - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 09:34:31,115 INFO: Spotify playlist 'first date - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 09:39:37,146 INFO: Spotify playlist 'first date - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 09:43:04,229 INFO: Spotify playlist 'first date - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 10:01:39,026 INFO: Spotify playlist 'wedding night - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 10:04:07,163 INFO: Spotify playlist 'wedding night - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 10:04:34,434 INFO: Spotify playlist 'wedding night - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 10:08:23,934 INFO: Spotify playlist 'wedding night - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 10:08:35,900 INFO: Spotify playlist 'wedding night - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 11:46:01,777 INFO: Spotify playlist 'wedding night - model B - Moodika-generated' was created for Spotify user 'dbr2211'.
+2022-07-04 11:49:24,158 INFO: Spotify playlist 'first date model A - Moodika-generated' was created for Spotify user 'dbr2211'.

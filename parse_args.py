@@ -18,7 +18,7 @@ def parse_args(args_string_list):
 
     update = subparser.add_parser('input', help=f'Input to pass to model. "input -h" for more information')
     update.add_argument('-t', '--text', type=str, help='Input text')
-    update.add_argument('-p', '--popularity', type=int, required=False, help=f'Desired popularity', default=100)
+    update.add_argument('-p', '--popularity', type=int, required=False, help=f'Desired popularity')
     update.add_argument('-l', '--length', type=int, required=False, help=f'Desired length of playlist', default=100)
     update.add_argument('-v', '--verbose', type=int, required=False,
                         help=f'Increase verbosity to show more information during playlist generation', default=0)

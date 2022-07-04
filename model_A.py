@@ -8,12 +8,6 @@ from config import *
 from parse_args import *
 import logging
 
-#
-# def authorize():
-#     sp = spotipy.Spotify(
-#         auth_manager=spotipy.oauth2.SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
-#     return sp
-
 
 def get_token():
     # Authorization

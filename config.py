@@ -34,7 +34,7 @@ genres = ["acoustic", "alt-rock", "alternative", "ambient", "anime",
 default_genres = ['pop', 'rock', 'folk', 'hip-hop', 'electronic']
 LOGFILE_NAME = "logfile.log"
 
-THRESHOLD = 0.3
+THRESHOLD = -10
 
 AUDIO_FEATURES_TO_EXTRACT = ['danceability', 'energy', 'key', 'mode', 'loudness', 'speechiness', 'acousticness',
                              'instrumentalness', 'liveness', 'valence', 'tempo', 'time_signature']

@@ -52,7 +52,7 @@ def generate_params(model_input, args):
         input_to_spotify_transformer = {}
 
     # Find the XGB files
-    xgboost_files = os.path.join("transformer_xgb_models/*_model_xgb_384")
+    xgboost_files = os.path.join("model_xgb_384/*_model_xgb_384")
     xgboost_models = glob.glob(xgboost_files)
 
     # Use each XGB model to predict on corresponding audio parameter

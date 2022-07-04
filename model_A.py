@@ -2,34 +2,13 @@ from gevent import monkey as curious_george
 curious_george.patch_all(thread=False, select=False)
 import pandas as pd
 import sys
-import base64
+import os
 from recommend_playlist import *
 from config import *
 from parse_args import *
 import logging
 
-
-def get_token():
-    # Authorization
-    url = "https://accounts.spotify.com/api/token"
-    headers2 = {}
-    data = {}
-
-    # Encode as Base64
-    message = f"{CLIENT_ID}:{CLIENT_SECRET}"
-    messageBytes = message.encode('ascii')
-    base64Bytes = base64.b64encode(messageBytes)
-    base64Message = base64Bytes.decode('ascii')
-
-    headers2['Authorization'] = f"Basic {base64Message}"
-    data['grant_type'] = "client_credentials"
-    r = requests.post(url, headers=headers2, data=data)
-    token = r.json()['access_token']
-    return token
-
-
-BASE_URL = 'https://api.spotify.com/v1'
-HEADERS = {'Authorization': 'Bearer {token}'.format(token=get_token())}
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 def raise_spotify_error():
@@ -68,6 +47,7 @@ def generate_params(args, num_playlists=10, print_steps=False):
 
 
 def main(print_steps=False):
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
     args = parse_args(sys.argv[1:])
     if print_steps:
         print("Parsed args:", args)
@@ -75,13 +55,17 @@ def main(print_steps=False):
         try:
             sp = authorize()
             genre_text = predict_genre(args)
+            if print_steps:
+                print("Genres:", genre_text)
             params = generate_params(args, num_playlists=10, print_steps=print_steps)
             if print_steps:
                 print("Spotify params:", params)
             tracks = recommend(params, genre_text, sp, args)
             if print_steps:
-                print("tracks:", tracks)
-            create_spotify_playlist(tracks, args.text, sp, args)
+                print("Playlist (Song URIs):", tracks)
+            playlist_url = create_spotify_playlist(tracks, args.text, sp, args)
+            if print_steps:
+                print("Playlist URL:", playlist_url)
         except ValueError as e:
             print('ValueError:', e)
             logging.critical(e)
@@ -94,19 +78,6 @@ def main(print_steps=False):
         except Exception as e:
             logging.critical(e)
     return
-
-
-# def generate_playlist(search_params):
-#     endpoint = f"{BASE_URL}/recommendations"
-#     lookup_url = f"{endpoint}?{search_params}"
-#     print(lookup_url)
-#     r = requests.get(lookup_url, headers=HEADERS)
-#     print('Playlist')
-#     if r:
-#         track_uris = []
-#         for track in r.json()['tracks']:
-#             print(f"Song: {track['name']}, Artist: {dict(track['album']['artists'][0])['name']}\n")
-#             track_uris.append(track['uri'])
 
 
 if __name__ == '__main__':

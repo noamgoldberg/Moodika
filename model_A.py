@@ -8,8 +8,6 @@ from config import *
 from parse_args import *
 import logging
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
 
 def raise_spotify_error():
     raise Exception(f'Nothing Returned from Spotify. Try using different input.')
@@ -37,7 +35,7 @@ def generate_params(args, num_playlists=10, verbose=0):
 
     # (3) Get audio features of each track in each playlist
     audio_features = [sp.audio_features(tracks=track_uris_dict[playlist]) for playlist in track_uris_dict]
-    audio_features = [[track_features for track_features in playlist if track_features] for playlist in track_uris_dict]
+    audio_features = [[track_features for track_features in playlist if track_features] for playlist in audio_features]
     print('audio_features:', audio_features)
     audio_features = [[{f: track[f] for f in AUDIO_FEATURES_TO_EXTRACT} for track in playlist] for playlist in
                       audio_features]

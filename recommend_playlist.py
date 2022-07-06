@@ -1,8 +1,6 @@
 import config as cfg
-import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from spotipy.oauth2 import SpotifyClientCredentials
 import logging
 import pickle
 import numpy as np

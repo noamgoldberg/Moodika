@@ -47,7 +47,7 @@ def generate_params(model_input, args):
 
     # Create dictionary to be added to (with popularity if argument has been passed)
     if args.popularity:
-        input_to_spotify_transformer = {'popularity': args.popularity}
+        input_to_spotify_transformer = {'target_popularity': args.popularity}
     else:
         input_to_spotify_transformer = {}
 

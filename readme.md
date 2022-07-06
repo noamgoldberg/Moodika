@@ -75,7 +75,7 @@ Here's why:
 Let us paint you a picture.
 
   <a >
-    <img src="beach.jpg" alt="Logo" width="320" height="320">
+    <img src="https://github.com/doronreiffman/doronreiffman.github.io/blob/main/beach.jpg?raw=true" alt="Logo" width="320" height="320">
   </a>
 
 You’re at the beach, with your friends. You’re enjoying an ice-cold (well, lukewarm) beer. The only thing missing to complete the scene are some phat tasty tunes.

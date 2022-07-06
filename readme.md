@@ -20,7 +20,7 @@
 <br />
 <div align="center">
   <a href="http://tinyurl.com/moodika">
-    <img src="moodika.png" alt="Logo" width="320" height="160">
+    <img src="https://github.com/doronreiffman/doronreiffman.github.io/blob/main/Artboard%201%20copy%203.jpg" alt="Logo" width="320" height="160">
   </a>
 
   <h3 align="center">Moodika - ITC Final Project</h3>
@@ -139,11 +139,11 @@ _Below is an example of how you can instruct your audience on installing and set
 The differences in the architecture of the 2 Models are summarized in the below pictures.
 
   <a >
-    <img src="modelb.jpg" alt="Logo" width="400" height="600">
+    <img src="https://github.com/doronreiffman/doronreiffman.github.io/blob/main/modelb.jpg" alt="Logo" width="400" height="600">
   </a>
 
   <a >
-    <img src="modela.jpg" alt="Logo" width="400" height="600">
+    <img src="https://github.com/doronreiffman/doronreiffman.github.io/blob/main/modela.jpg" alt="Logo" width="400" height="600">
   </a>
 
 
